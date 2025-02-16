@@ -3,10 +3,12 @@ package org.example.controller;
 import org.example.entity.RefreshToken;
 import org.example.event.eventProducer.UserInfoProducer;
 import org.example.model.UserInfoDto;
+import org.example.model.UserInfoEventDto;
 import org.example.model.response.JwtResponseDto;
 import org.example.service.JwtService;
 import org.example.service.RefreshTokenService;
 import org.example.service.UserDetailsServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +32,13 @@ public class AuthController {
 
     @PostMapping("auth/v1/signup")
     public ResponseEntity<?> signUpUser(@RequestBody UserInfoDto userInfoDto) {
-        Boolean userSignedUp = userDetailsServiceImpl.signUpUser(userInfoDto);
+        Boolean userAlreadySignedUp = userDetailsServiceImpl.signUpUser(userInfoDto);
 
-        if (!userSignedUp) return new ResponseEntity<>("User Already Exists with given username", HttpStatus.BAD_REQUEST);
+        if (userAlreadySignedUp) return new ResponseEntity<>("User Already Exists with given username", HttpStatus.BAD_REQUEST);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInfoDto.getUsername());
         String jwtToken = jwtService.createToken(userInfoDto.getUsername());
         JwtResponseDto jwtResponseDto = new JwtResponseDto(jwtToken, refreshToken.getToken());
-
-        userInfoProducer.sendUserInfo(userInfoDto);
-
         return new ResponseEntity<JwtResponseDto>(jwtResponseDto, HttpStatus.OK);
     }
 }

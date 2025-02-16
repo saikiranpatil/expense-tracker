@@ -17,11 +17,12 @@ import java.util.Set;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfo {
     @Id
-    private String id;
+    @Column(name = "user_id")
+    private String userId;
     private String username;
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_to_roles",
             joinColumns = @JoinColumn(name = "user_id"),

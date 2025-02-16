@@ -5,7 +5,9 @@ import lombok.Data;
 import org.example.entity.UserInfo;
 import org.example.event.eventProducer.UserInfoProducer;
 import org.example.model.UserInfoDto;
+import org.example.model.UserInfoEventDto;
 import org.example.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,14 +45,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public Boolean signUpUser(UserInfoDto userInfoDto){
         userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
         if(userRepository.findByUsername(userInfoDto.getUsername()).isPresent()){
-            return false;
+            return true;
         }
 
         String uuid = UUID.randomUUID().toString();
         userRepository.save(new UserInfo(uuid, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>()));
+        userInfoDto.setUserId(uuid);
+        UserInfoEventDto userInfoEventDto = new UserInfoEventDto();
+        BeanUtils.copyProperties(userInfoDto, userInfoEventDto);
+        userInfoProducer.sendUserInfo(userInfoEventDto);
 
-        userInfoProducer.sendUserInfo(userInfoDto);
-
-        return true;
+        return false;
     }
 }

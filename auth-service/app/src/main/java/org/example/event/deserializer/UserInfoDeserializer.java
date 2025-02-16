@@ -3,12 +3,13 @@ package org.example.event.deserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.example.model.UserInfoDto;
+import org.example.model.UserInfoEventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
-public class UserInfoDeserializer implements Deserializer<org.example.model.UserInfoDto> {
+public class UserInfoDeserializer implements Deserializer<org.example.model.UserInfoEventDto> {
     @Value("${spring.kafka.topic.name}")
     private String TOPIC_NAME;
 
@@ -21,16 +22,16 @@ public class UserInfoDeserializer implements Deserializer<org.example.model.User
     }
 
     @Override
-    public UserInfoDto deserialize(String topic, byte[] data) {
-        UserInfoDto userInfoDto = null;
+    public UserInfoEventDto deserialize(String topic, byte[] data) {
+        UserInfoEventDto userInfoEventDto = null;
 
         try {
-            userInfoDto = objectMapper.readValue(data, UserInfoDto.class);
+            userInfoEventDto = objectMapper.readValue(data, UserInfoEventDto.class);
         }catch (Exception e) {
             throw new RuntimeException("Error deserializing UserInfoDto", e);
         }
 
-        return userInfoDto;
+        return userInfoEventDto;
     }
 
     @Override

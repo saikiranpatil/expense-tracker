@@ -11,11 +11,10 @@ import org.example.entity.UserInfo;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class UserInfoDto extends UserInfo {
     private String firstName;
     private String lastName;
-    private long phoneNumber;
+    private Long phoneNumber;
     private String email;
 }

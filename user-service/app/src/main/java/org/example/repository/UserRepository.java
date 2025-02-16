@@ -1,8 +1,10 @@
 package org.example.repository;
 
-import org.example.entity.UserInfoDto;
+import org.example.entity.UserInfo;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<UserInfoDto, Long> {
-    UserInfoDto findByUserId(String userId);
+import java.util.Optional;
+
+public interface UserRepository extends CrudRepository<UserInfo, String> {
+    Optional<UserInfo> findByUserId(String userId);
 }

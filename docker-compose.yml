@@ -26,4 +26,4 @@ services:
       CLUSTER_ID: "5PPSWmvbSpyRtgAAtrXoNQ"  # A unique ID for the Kafka cluster.
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/var/lib/kafka/data  # Store Kafka logs on your local machine.
+#      - ./data:/var/lib/kafka/data  # Store Kafka logs on your local machine.

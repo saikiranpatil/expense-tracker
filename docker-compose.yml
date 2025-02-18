@@ -17,7 +17,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LOG_DIRS: /var/lib/kafka/data  # Where Kafka stores its logs.
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"  # Kafka will automatically create topics if needed.
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Since we’re running one broker, one replica is enough.
@@ -26,4 +26,44 @@ services:
       CLUSTER_ID: "5PPSWmvbSpyRtgAAtrXoNQ"  # A unique ID for the Kafka cluster.
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-#      - ./data:/var/lib/kafka/data  # Store Kafka logs on your local machine.
+
+  mysql:
+    image: mysql:8.3.0
+    container_name: mysql-8.3.0
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+        MYSQL_DATABASE: expense_tracker
+        MYSQL_USER: 'test'
+        MYSQL_ROOT_USER: 'root'
+        MYSQL_PASSWORD: 'password'
+        MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - mysql-db:/var/lib/mysql
+
+  user-service:
+    image: user-service
+    container_name: user-service
+    ports:
+      - '9899:9899'
+    expose:
+      - '9899'
+    depends_on:
+      - kafka
+      - mysql
+
+  auth-service:
+    image: auth-service
+    container_name: auth-service
+    ports:
+      - '9898:9898'
+    expose:
+      - '9898'
+    depends_on:
+      - kafka
+      - mysql
+volumes:
+  mysql-db:
+    driver: local

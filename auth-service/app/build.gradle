@@ -55,5 +55,5 @@ java {
     }
 }
 application {
-    mainClass = 'authservice.App'
+    mainClass = 'org.example.App'
 }

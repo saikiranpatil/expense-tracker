@@ -3,7 +3,6 @@
  */
 package org.example;
 
-import org.example.entity.UserRole;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,6 +10,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-        UserRole userRole  = new UserRole();
     }
 }

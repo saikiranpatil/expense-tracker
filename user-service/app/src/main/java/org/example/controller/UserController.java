@@ -5,9 +5,10 @@ import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class UserController {
     @Autowired
     private UserService userService;
@@ -24,6 +25,7 @@ public class UserController {
 
     @GetMapping("/user/v1/getUserInfo")
     public ResponseEntity<UserInfoDto> getUserInfo(@RequestParam("userId") String userId) {
+        System.out.println("userId: " + userId);
         try {
             UserInfoDto userInfoDto = userService.getUserInfo(userId);
             return new ResponseEntity<>(userInfoDto, HttpStatus.OK);

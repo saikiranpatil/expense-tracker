@@ -64,6 +64,18 @@ services:
     depends_on:
       - kafka
       - mysql
+
+  expense-service:
+    image: expense-service
+    container_name: expense-service
+    ports:
+      - '9880:9880'
+    expose:
+      - '9880'
+    depends_on:
+      - kafka
+      - mysql
+
 volumes:
   mysql-db:
     driver: local

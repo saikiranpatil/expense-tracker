@@ -1,2 +1,50 @@
 /dsenv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Logs and database files
+*.log
+instance/
+*.sqlite3
+*.db
+
+# Environment variables
 .env
+.env.local
+.env.*.bkp
+
+# Pytest / Coverage
+.coverage
+htmlcov/
+*.cover
+*.py,cover
+.cache/
+nosetests.xml
+coverage.xml
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# VSCode settings
+.vscode/
+
+# IDE files
+.idea/
+*.iml
+
+# MacOS files
+.DS_Store

@@ -34,3 +34,9 @@ class ExpenseSchema(BaseModel):
         title="currency",
         description="The currency of the expense. If not found, return null. (Example: 'USD')"
     )
+    
+    class Config:
+        json_encoders = {
+            Decimal: lambda v: float(v),  # Convert Decimal to float (numeric value)
+            date_type: lambda v: v.isoformat(),  # Convert date to ISO format string
+        }

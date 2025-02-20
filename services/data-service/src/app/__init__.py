@@ -1,8 +1,17 @@
 from flask import Flask, request, jsonify
 from service.messageService import MessageService
+from kafka import KafkaProducer
+
+import json
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+
+messageService = MessageService()
+producer = KafkaProducer(
+        bootstrap_servers=["localhost:9092"], 
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
 
 @app.route('/ds/v1/message', methods=['POST'])
 def handleMessage():
@@ -11,12 +20,16 @@ def handleMessage():
     if message is None:
         return jsonify({"error": "message is required"}), 400
     
-    response = MessageService().process_message(message)
+    response = messageService.process_message(message)
     
     if response is None:
         return jsonify({"message": "Not an expense"}), 404
     
-    return response.model_dump_json(exclude_unset=False)
+    response_json = response.model_dump_json(exclude_unset=False)
+
+    producer.send("expense-service-topic", json.loads(response_json))
+    
+    return response_json
 
 @app.route('/', methods=['GET'])
 def handleMessages():

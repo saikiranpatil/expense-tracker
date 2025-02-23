@@ -76,6 +76,20 @@ services:
       - kafka
       - mysql
 
+  data-service:
+    image: data-service
+    container_name: data-service
+    ports:
+      - '9881:9881'
+    expose:
+      - '9881'
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      MISTRALAI_KEY: hEcIHreMheeFw4tAjbQUgFVYSLtAQljG
+    depends_on:
+      - kafka
+      - expense-service
 volumes:
   mysql-db:
     driver: local

@@ -41,7 +41,7 @@ class LLMService:
             partial_variables={"format_instructions": parser.get_format_instructions()},
         )
 
-        self.api_key = os.getenv("MINSTRALAI_KEY")
+        self.api_key = os.getenv("MISTRALAI_KEY")
         self.llm = ChatMistralAI(api_key=self.api_key, model_name="mistral-large-latest", temperature=0)
         self.runnable = self.prompt | self.llm
 

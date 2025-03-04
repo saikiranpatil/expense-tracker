@@ -31,8 +31,8 @@ def handleMessage():
     
     return response_json
 
-@app.route('/', methods=['GET'])
-def handleMessages():
+@app.route('/ds/v1/health', methods=['GET'])
+def helloWorld():
     return "HELLO WORLD!"
 
 if __name__ == '__main__':

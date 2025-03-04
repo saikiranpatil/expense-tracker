@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name="users")
+@Table(name="expense")
 @Getter
 @Setter
 @AllArgsConstructor

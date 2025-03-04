@@ -19,12 +19,16 @@ public class ExpenseService {
     private final ExpenseMapper expenseMapper;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public void createExpense(ExpenseDto expenseDto){
+    public ExpenseDto createExpense(ExpenseDto expenseDto){
+        ExpenseEntity expenseEntity = null;
+        ExpenseDto newExpenseDto = new ExpenseDto();
         try{
-            expenseRepository.save(objectMapper.convertValue(expenseDto, ExpenseEntity.class));
+            expenseEntity = expenseRepository.save(objectMapper.convertValue(expenseDto, ExpenseEntity.class));
+            BeanUtils.copyProperties(expenseEntity, newExpenseDto);
         }catch (Exception e){
             System.out.println("Error While creating expense:" + e);
         }
+        return newExpenseDto;
     }
 
     // TODOS: Implement Distributed Locking to handle acid principles of sql in update query

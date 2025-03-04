@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -38,6 +39,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new CustomUserDetails(extractedUserInfo);
     }
 
+    public String getUserIdByUsername(String userName){
+        return userRepository.findByUsername(userName)
+                .map(UserInfo::getUserId)
+                .orElseThrow(() -> new UsernameNotFoundException("UserId not found"));
+    }
+
     public UserInfo checkIfUserExists(String username) {
         return userRepository.findByUsername(username).orElse(null);
     }
@@ -53,7 +60,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userInfoDto.setUserId(uuid);
         UserInfoEventDto userInfoEventDto = new UserInfoEventDto();
         BeanUtils.copyProperties(userInfoDto, userInfoEventDto);
-        userInfoProducer.sendUserInfo(userInfoEventDto);
+//        userInfoProducer.sendUserInfo(userInfoEventDto);
 
         return false;
     }

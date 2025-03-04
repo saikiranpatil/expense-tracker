@@ -1,14 +1,93 @@
 _format_version: "2.1"
+
 services:
   - name: auth-service
-    url: http://172.19.0.4:9898
+    url: http://auth-service:9898
     routes:
       - name: sign-up
         paths:
           - /auth/v1/signup
+        strip_path: false
+
+      - name: login
+        paths:
+          - /auth/v1/login
+        strip_path: false
+
+      - name: refresh-token
+        paths:
+          - /auth/v1/refreshToken
+        strip_path: false
+
+      - name: ping
+        paths:
+          - /auth/v1/ping
+        strip_path: false
+
+      - name: auth-health
+        paths:
+          - /auth/v1/health
+        strip_path: false
+
   - name: user-service
-    url: http://172.19.0.5:9899
+    url: http://user-service:9899
+    plugins:
+      - name: auth-validator
+        config:
+          auth_url: http://auth-service:9898/auth/v1/ping
     routes:
       - name: get-user
         paths:
           - /user/v1/getUser
+        strip_path: false
+      - name: modify-user
+        paths:
+          - /user/v1/modify
+        strip_path: false
+      - name: user-health
+        paths:
+          - /user/v1/health
+        strip_path: false
+
+  - name: expense-service
+    url: http://expense-service:9880
+    plugins:
+      - name: auth-validator
+        config:
+          auth_url: http://auth-service:9898/auth/v1/ping
+    routes:
+      - name: get-expenses
+        paths:
+          - /expense/v1/getExpenses
+        strip_path: false
+      - name: add-expense
+        paths:
+          - /expense/v1/addExpense
+        strip_path: false
+      - name: expense-health
+        paths:
+          - /expense/v1/health
+        strip_path: false
+
+  - name: data-service
+    url: http://data-service:9881
+    plugins:
+      - name: auth-validator
+        config:
+          auth_url: http://auth-service:9898/auth/v1/ping
+    routes:
+      - name: data-message
+        paths:
+          - /ds/v1/message
+        strip_path: false
+      - name: data-health
+        paths:
+          - /ds/v1/health
+        strip_path: false
+
+  - name: http-bin
+    url: http://httpbin.org/get
+    routes:
+      - name: http-bin
+        paths:
+          - /http-bin

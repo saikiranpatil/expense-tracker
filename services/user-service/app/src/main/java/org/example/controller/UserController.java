@@ -23,14 +23,18 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/v1/getUserInfo")
-    public ResponseEntity<UserInfoDto> getUserInfo(@RequestParam("userId") String userId) {
-        System.out.println("userId: " + userId);
+    @GetMapping("/user/v1/getUser")
+    public ResponseEntity<UserInfoDto> getUserInfo(@RequestHeader("X-User-Id") String userId) {
         try {
             UserInfoDto userInfoDto = userService.getUserInfo(userId);
             return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/user/v1/health")
+    public ResponseEntity<?> health() {
+        return new ResponseEntity<>("Active", HttpStatus.OK);
     }
 }
